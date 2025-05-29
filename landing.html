@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive SMS AI Architecture Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Visualization & Content Choices:
+        - Report Info: System Architecture Diagram -> Goal: Understand overall structure -> Viz/Presentation: Interactive HTML/CSS blocks (Tailwind) -> Interaction: Click components to highlight/show details/navigate -> Justification: Visual and intuitive entry point.
+        - Report Info: Section 3 (Core Components) & Table 1 -> Goal: Understand individual components -> Viz/Presentation: Dropdown/tabs to select component, text display -> Interaction: Select component to update displayed info -> Justification: Focused detail exploration.
+        - Report Info: Section 4 (Data Flows) & Table 2 -> Goal: Understand data movement -> Viz/Presentation: Step-by-step HTML/JS navigation, HTML table -> Interaction: Click through flow steps -> Justification: Clarifies dynamic processes.
+        - Report Info: Section 5 (Key Capabilities) -> Goal: Summarize system strengths -> Viz/Presentation: Accordion list -> Interaction: Expand/collapse to read details -> Justification: Concise summary.
+        - Report Info: Sections 1 & 6 (Intro/Conclusion) -> Goal: Provide report context -> Viz/Presentation: Text blocks -> Interaction: Read content -> Justification: Background and summary.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .tab-button {
+            @apply px-4 py-2 text-sm font-medium text-stone-700 hover:bg-sky-100 hover:text-sky-700 rounded-md transition-colors duration-150;
+        }
+        .tab-button.active {
+            @apply bg-sky-600 text-white hover:bg-sky-700;
+        }
+        .content-section {
+            @apply p-6 bg-white rounded-lg shadow-lg min-h-[60vh];
+        }
+        .component-block {
+            @apply border-2 border-stone-300 p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow cursor-pointer text-center bg-stone-50;
+        }
+        .component-block h3 {
+            @apply text-sky-700 font-semibold;
+        }
+        .accordion-button {
+            @apply w-full flex justify-between items-center p-4 text-left font-semibold text-stone-800 bg-stone-100 hover:bg-stone-200 rounded-md transition-colors;
+        }
+        .accordion-content {
+            @apply p-4 bg-stone-50 rounded-b-md;
+        }
+        .data-flow-step {
+            @apply p-3 border border-stone-200 rounded-md mb-2 bg-white;
+        }
+        .data-flow-nav button {
+            @apply px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 disabled:bg-stone-300;
+        }
+        .table-container {
+            @apply overflow-x-auto;
+        }
+        table {
+            @apply min-w-full divide-y divide-stone-200;
+        }
+        th {
+            @apply px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider bg-stone-50;
+        }
+        td {
+            @apply px-6 py-4 whitespace-normal text-sm text-stone-700;
+        }
+        tr:nth-child(even) {
+            @apply bg-stone-50;
+        }
+         /* For Inter font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    </style>
+</head>
+<body class="bg-stone-100 text-stone-800">
+    <div class="container mx-auto p-4 sm:p-8">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl sm:text-4xl font-bold text-sky-700">SMS-Driven AI Interaction Platform</h1>
+            <p class="text-stone-600 mt-2">An Interactive Exploration of the System Architecture</p>
+        </header>
+
+        <nav class="mb-8 flex flex-wrap justify-center space-x-2 sm:space-x-4 bg-white p-3 rounded-lg shadow-md">
+            <button class="tab-button active" data-tab="overview">Overview</button>
+            <button class="tab-button" data-tab="components">Components</button>
+            <button class="tab-button" data-tab="dataFlows">Data Flows</button>
+            <button class="tab-button" data-tab="capabilities">Key Capabilities</button>
+            <button class="tab-button" data-tab="aboutReport">About Report</button>
+        </nav>
+
+        <main id="mainContent">
+            <section id="overview" class="content-section">
+                <h2 class="text-2xl font-semibold text-sky-700 mb-4">System Overview</h2>
+                <p class="mb-6 text-stone-700">This section provides a high-level visual and textual overview of the SMS-driven AI interaction platform. The diagram below illustrates the main components and their general arrangement. Click on a component block to learn more about its role and navigate to its detailed description.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 items-start">
+                    <div class="component-block" data-component-id="user">
+                        <h3 class="text-lg">📱 User & Mobile Phone</h3>
+                        <p class="text-sm text-stone-600 mt-1">Student & Rookie initiating SMS interactions.</p>
+                    </div>
+                    <div class="component-block" data-component-id="mobileNetwork">
+                        <h3 class="text-lg">📡 Mobile Network Infrastructure</h3>
+                        <p class="text-sm text-stone-600 mt-1">Transmits SMS messages.</p>
+                    </div>
+                    <div class="component-block" data-component-id="smsGateway">
+                        <h3 class="text-lg">🚪 SMS Gateway</h3>
+                        <p class="text-sm text-stone-600 mt-1">Interface between mobile network and backend.</p>
+                    </div>
+                </div>
+                <div class="flex justify-center items-center my-4">
+                    <span class="text-3xl text-sky-600">↕️</span>
+                </div>
+                <div class="component-block md:col-span-3 mx-auto max-w-2xl" data-component-id="backendSystem">
+                    <h3 class="text-xl">⚙️ Backend System (Hosted on Data Centres)</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4 p-2 bg-stone-100 rounded">
+                        <div class="component-block !p-2 !border-sky-200" data-component-id="appEngine">
+                            <h4 class="text-md">App Engine</h4>
+                            <p class="text-xs text-stone-500">Orchestrates flow</p>
+                        </div>
+                        <div class="component-block !p-2 !border-sky-200" data-component-id="aiEngine">
+                            <h4 class="text-md">AI Engine (LLM)</h4>
+                            <p class="text-xs text-stone-500">Processes queries</p>
+                        </div>
+                        <div class="component-block !p-2 !border-sky-200" data-component-id="database">
+                            <h4 class="text-md">Database</h4>
+                            <p class="text-xs text-stone-500">Stores user data</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="component-block mt-6 mx-auto max-w-md" data-component-id="dataCentres">
+                        <h3 class="text-lg">🏢 Data Centres</h3>
+                        <p class="text-sm text-stone-600 mt-1">Hosts the Backend System.</p>
+                    </div>
+
+                <h3 class="text-xl font-semibold text-sky-700 mt-8 mb-3">Overall System Flow</h3>
+                <p class="text-stone-700 leading-relaxed">The system begins with a user sending an SMS. This message travels through the Mobile Network to the SMS Gateway. The Gateway forwards it to the Backend System, where the Application Engine coordinates with the AI Engine and Database. The AI Engine processes the query, using stored user history, generates a response, and updates the Database. This response is sent back through the SMS Gateway and Mobile Network to the user's phone. The entire backend is hosted in Data Centres for reliability and scalability.</p>
+            </section>
+
+            <section id="components" class="content-section hidden">
+                <h2 class="text-2xl font-semibold text-sky-700 mb-4">Core System Components</h2>
+                <p class="mb-6 text-stone-700">Explore the individual components of the SMS AI platform. Select a component from the dropdown to view its detailed description, primary functions, key responsibilities, and how it interacts with other parts of the system. This allows for a deeper understanding of each element's specific role.</p>
+                <div class="mb-6">
+                    <label for="componentSelect" class="block text-sm font-medium text-stone-700 mb-1">Select Component:</label>
+                    <select id="componentSelect" class="w-full p-2 border border-stone-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500">
+                        <option value="">-- Select a Component --</option>
+                    </select>
+                </div>
+                <div id="componentDetail" class="mt-4 p-4 border border-stone-200 rounded-lg bg-stone-50 min-h-[300px]">
+                    <p class="text-stone-500">Select a component to see its details here.</p>
+                </div>
+            </section>
+
+            <section id="dataFlows" class="content-section hidden">
+                <h2 class="text-2xl font-semibold text-sky-700 mb-4">Detailed Component Interactions & Data Flows</h2>
+                <p class="mb-6 text-stone-700">This section details the pathways and types of data exchanged between system components. You can navigate through the data flow steps sequentially or review the summary table of all interactions. This provides a dynamic view of the system's operational mechanics.</p>
+
+                <h3 class="text-xl font-semibold text-sky-700 mt-6 mb-3">Interactive Data Flow Steps</h3>
+                <div id="interactiveDataFlow" class="mb-8 p-4 border border-stone-200 rounded-lg bg-stone-50">
+                    <div id="currentDataFlowStep" class="min-h-[150px]">
+                        <p class="text-stone-500">Click "Next Step" to begin exploring the data flow.</p>
+                    </div>
+                    <div class="data-flow-nav mt-4 flex justify-between">
+                        <button id="prevDataFlowStep" disabled>⬅️ Previous Step</button>
+                        <button id="nextDataFlowStep">Next Step ➡️</button>
+                    </div>
+                </div>
+                
+                <h3 class="text-xl font-semibold text-sky-700 mt-8 mb-3">Summary: Key Data Flows and Interactions</h3>
+                <div id="dataFlowsTableContainer" class="table-container"></div>
+            </section>
+
+            <section id="capabilities" class="content-section hidden">
+                <h2 class="text-2xl font-semibold text-sky-700 mb-4">Key System Capabilities</h2>
+                <p class="mb-6 text-stone-700">Discover the fundamental capabilities and operational principles of the SMS-driven AI platform. These highlights are derived from the detailed component analysis and showcase the system's core strengths and design focus. Click on each capability to expand and read more.</p>
+                <div id="capabilitiesAccordion" class="space-y-3"></div>
+            </section>
+
+            <section id="aboutReport" class="content-section hidden">
+                <h2 class="text-2xl font-semibold text-sky-700 mb-4">About the Source Report</h2>
+                <p class="mb-6 text-stone-700">This section provides context from the original "System Architecture Overview: SMS-Driven AI Interaction Platform" report. It includes insights from the introduction and conclusion, outlining the report's objectives and overall findings.</p>
+
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-sky-700 mb-2">Report Introduction Summary</h3>
+                        <p class="text-stone-700 leading-relaxed" id="reportIntroContent">The source report meticulously details the system architecture for an SMS-driven AI interaction platform. Its primary goal is to explain each component, its role, interactions, and data flow. The system facilitates AI-powered interactions via SMS, tailored for educational content and games, maximizing accessibility. The analysis is confined to the provided diagram, intended for technical stakeholders, and emphasizes the system's reliance on SMS as a fundamental design choice for broad reach, trading UI richness for universal availability.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-sky-700 mb-2">Report Conclusion Summary</h3>
+                        <p class="text-stone-700 leading-relaxed" id="reportConclusionContent">The depicted architecture provides a robust platform for AI-powered SMS interactions. Each component, from user phone to backend Data Centres, plays a synergistic role. Strengths include SMS accessibility, a specialized AI Engine for education/games, and data persistence for personalization. It bridges traditional mobile communication with advanced AI, offering a scalable, reliable solution for engaging a wide audience, especially "Student & Rookie" users. The design is modular, but SMS limitations necessitate excellent textual interaction and strong data security.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="mt-12 pt-8 border-t border-stone-300 text-center">
+            <p class="text-sm text-stone-600">&copy; 2024 Interactive Architecture Explorer. Based on the SMS AI Education Architecture Report.</p>
+        </footer>
+    </div>
+
+    <script>
+        const reportData = {
+            components: [
+                { 
+                    id: "user", 
+                    name: "User and Mobile Phone", 
+                    primaryFunction: "Initial point of interaction and final recipient of communications.",
+                    keyResponsibilities: "Sending outbound SMS queries; receiving AI-generated SMS responses.",
+                    details: "The user, identified as 'Student & Rookie', initiates interactions by sending SMS messages and receives AI responses. This labeling implies the AI must be tailored for beginners, focusing on clarity, patience, and adaptive learning for education and games.",
+                    interactions: "Sends 'SMS outbound from user'. Receives 'SMS response received by user'."
+                },
+                { 
+                    id: "mobileNetwork", 
+                    name: "Mobile Network Infrastructure", 
+                    primaryFunction: "Foundational telecommunications backbone for SMS transmission.",
+                    keyResponsibilities: "Ensuring reliable transmission of inbound and outbound SMS messages.",
+                    details: "This infrastructure transmits SMS between the user and the SMS Gateway. It routes messages across operators. System performance depends on this external network, which can have variability (congestion, outages). Monitoring SMS delivery is crucial.",
+                    interactions: "Transmits 'SMS outbound from user' to SMS Gateway. Transmits 'SMS response received by user' from SMS Gateway."
+                },
+                { 
+                    id: "smsGateway", 
+                    name: "SMS Gateway", 
+                    primaryFunction: "Critical interface bridging mobile network and Backend System.",
+                    keyResponsibilities: "Receiving inbound SMS; forwarding user content and identification; receiving AI responses; sending outbound SMS.",
+                    details: "Acts as the entry/exit for SMS traffic. It receives inbound SMS, forwards 'User SMS content' and a user identifier (phone number) to the Backend. This identifier enables retrieval of 'user context/history'. It also sends AI responses back to the mobile network. Reliability, security, and performance are paramount for this component.",
+                    interactions: "Receives 'Inbound SMS'. Forwards 'User SMS content' and 'user identifier' to Backend. Receives 'AI generated SMS'. Sends 'Outbound SMS (AI response)'."
+                },
+                {
+                    id: "backendSystem",
+                    name: "Backend System",
+                    primaryFunction: "Central processing and intelligence hub.",
+                    keyResponsibilities: "Orchestrating interactions, applying AI, managing persistent data. Hosted on Data Centres.",
+                    details: "Comprises the Application Engine, AI Engine, and Database. It's hosted in Data Centres for high availability and scalability.",
+                    interactions: "Interacts internally between its sub-components and externally with the SMS Gateway."
+                },
+                { 
+                    id: "appEngine", 
+                    name: "Application Engine", 
+                    primaryFunction: "Orchestrator and business logic layer within the Backend System.",
+                    keyResponsibilities: "Managing information flow; coordinating AI Engine and Database interactions; preparing responses.",
+                    details: "Manages information flow, coordinating between SMS Gateway, AI Engine, and Database. Receives user SMS content, initiates AI queries (including for history/progress), and prepares AI responses for dispatch. Decoupled from AI Engine for modularity, scalability, and easier maintenance.",
+                    interactions: "Receives 'User SMS content' from SMS Gateway. Sends 'Query for history/progress' to AI Engine. Receives 'AI response' from AI Engine. Sends response to SMS Gateway."
+                },
+                { 
+                    id: "aiEngine", 
+                    name: "AI Engine (LLM)", 
+                    primaryFunction: "Intelligent core for natural language understanding and response generation.",
+                    keyResponsibilities: "Processing user input (LLM); generating context-aware responses; managing conversational state; interacting with Database.",
+                    details: "The intelligent core, using an LLM 'fine-tuned for Education' and 'processing games'. Understands user input, generates context-aware responses, and manages conversational dynamics. Interacts bi-directionally with the Database for history/progress to personalize the experience for 'Student & Rookie' users. This enables adaptive learning and gaming.",
+                    interactions: "Receives 'Query for history/progress'. Queries Database for 'user context/history'. Stores 'user info, progress, conversation history' in Database. Generates 'AI generated SMS (AI response)' and sends to Application Engine/SMS Gateway."
+                },
+                { 
+                    id: "database", 
+                    name: "Database", 
+                    primaryFunction: "Central, persistent data store for all critical system information.",
+                    keyResponsibilities: "Storing user info, progress, conversation history; providing context to AI Engine; utilizing phone # as unique ID.",
+                    details: "Stores 'user info, progress, conversation history', using 'phone # as unique ID'. Provides 'user context/history' to the AI Engine for personalized responses and conversational continuity. Critical for statefulness in the stateless SMS medium. Integrity, availability, and performance are vital.",
+                    interactions: "Stores data from AI Engine. Provides data to AI Engine."
+                },
+                { 
+                    id: "dataCentres", 
+                    name: "Data Centres", 
+                    primaryFunction: "Robust physical/logical infrastructure for hosting the Backend System.",
+                    keyResponsibilities: "Ensuring high availability, scalability, security, and optimal performance for backend components.",
+                    details: "Hosts the entire Backend System (Application Engine, AI Engine, Database). Provides infrastructure for high availability, scalability, security, and performance, supporting continuous service and a large user base. Implies focus on uptime, disaster recovery, and elastic resource scaling.",
+                    interactions: "Provides the hosting environment for all backend components."
+                }
+            ],
+            dataFlows: [
+                { step: 1, title: "User to Mobile Network: Outbound SMS", source: "User & Mobile Phone", destination: "Mobile Network Infrastructure", dataType: "SMS outbound from user (text content, sender phone #)", purpose: "Initiate interaction, send query/input to system." },
+                { step: 2, title: "Mobile Network to SMS Gateway: Inbound SMS", source: "Mobile Network Infrastructure", destination: "SMS Gateway", dataType: "Inbound SMS (raw SMS data, sender phone #, message body)", purpose: "Deliver user's message from public network to system's gateway." },
+                { step: 3, title: "SMS Gateway to Backend: User Content & Context Trigger", source: "SMS Gateway", destination: "Backend System (Application Engine)", dataType: "User SMS content, User phone # (for context retrieval)", purpose: "Provide current user input and identifier to access historical context." },
+                { step: 4, title: "Backend (App Engine to AI Engine): Query for History", source: "Backend System (Application Engine)", destination: "AI Engine", dataType: "Query for history/progress (User ID, current SMS content, parameters)", purpose: "Prime AI Engine with conversational context for relevant response generation." },
+                { step: 5, title: "AI Engine & Database: Bi-directional Interaction", source: "AI Engine / Database", destination: "AI Engine / Database", dataType: "User info, progress, conversation history (to DB); User context/history (from DB)", purpose: "Persist data and retrieve context for personalization and continuity." },
+                { step: 6, title: "AI Engine to SMS Gateway: AI Generated Response", source: "AI Engine", destination: "SMS Gateway (via Application Engine)", dataType: "AI generated SMS (AI response) (text message)", purpose: "Formulate AI's reply and prepare for transmission back to user." },
+                { step: 7, title: "SMS Gateway to Mobile Network: Outbound AI SMS", source: "SMS Gateway", destination: "Mobile Network Infrastructure", dataType: "Outbound SMS (AI response) (formatted SMS, recipient phone #, AI text)", purpose: "Send AI's response to mobile network for delivery." },
+                { step: 8, title: "Mobile Network to User: SMS Response Received", source: "Mobile Network Infrastructure", destination: "User & Mobile Phone", dataType: "SMS response received by user (final text-based SMS)", purpose: "Deliver AI's response to the user, completing the interaction cycle." }
+            ],
+            dataFlowsTable: [
+                { source: "User", destination: "Mobile Network Infrastructure", dataType: "SMS outbound from user (text content, sender phone #)", purpose: "Initiate interaction, send query/input to system." },
+                { source: "Mobile Network Infrastructure", destination: "SMS Gateway", dataType: "Inbound SMS (raw SMS data, sender phone #, message body)", purpose: "Deliver user's message from public network to system's gateway." },
+                { source: "SMS Gateway", destination: "Backend System (Application Engine)", dataType: "User SMS content, User phone # (for context retrieval)", purpose: "Provide current user input and identifier to access historical context." },
+                { source: "Backend System (Application Engine)", destination: "AI Engine", dataType: "Query for history/progress (User ID, current SMS content, parameters)", purpose: "Prime AI Engine with conversational context for relevant response generation." },
+                { source: "AI Engine", destination: "Database", dataType: "User info, progress, conversation history", purpose: "Persistently store user data, progress, and conversation logs." },
+                { source: "Database", destination: "AI Engine", dataType: "User context/history", purpose: "Provide historical data to AI Engine for context-aware and personalized responses." },
+                { source: "AI Engine", destination: "SMS Gateway", dataType: "AI generated SMS (AI response) (text message)", purpose: "Formulate AI's reply and prepare for transmission back to user." },
+                { source: "SMS Gateway", destination: "Mobile Network Infrastructure", dataType: "Outbound SMS (AI response) (formatted SMS, recipient phone #, AI text)", purpose: "Send AI's response to mobile network for delivery." },
+                { source: "Mobile Network Infrastructure", destination: "User", dataType: "SMS response received by user (final text-based SMS)", purpose: "Deliver AI's response to the user, completing the interaction cycle." }
+            ],
+            capabilities: [
+                { 
+                    title: "AI Engine's Specialized Functions and Value Proposition", 
+                    content: "The AI Engine, an LLM 'fine-tuned for Education' and 'processing games', is the system's core intelligence. It delivers interactive lessons, quizzes, and info via SMS, ensuring responses are pedagogically sound and adapted for 'Student & Rookie' users. It also manages text-based games, interpreting inputs, managing states, and generating game responses. Fundamentally, it excels at natural language understanding and generation for intuitive SMS conversations."
+                },
+                { 
+                    title: "User Context and History Maintenance for Personalization", 
+                    content: "The system stores 'user info, progress, conversation history' in the Database, using 'phone # as unique ID'. This enables stateful, personalized interactions. The AI 'remembers' past conversations, tracks learning, and recalls game states, tailoring interactions and allowing users to resume sessions seamlessly. This enhances engagement and efficacy."
+                },
+                { 
+                    title: "Ubiquitous Accessibility and Reach", 
+                    content: "Using SMS ensures broad accessibility, reaching users with limited internet or feature phones. This prioritizes reach and simplicity over multimedia experiences. All interactions are text-based, requiring careful design for educational content and games to be effective within these constraints. Success hinges on the AI's ability to engage users through well-crafted text."
+                },
+                { 
+                    title: "Scalability, Reliability, and Robust Infrastructure (and Security)", 
+                    content: "Hosting the Backend System in 'Data Centres' indicates a design for enterprise-grade reliability, scalability, and security. This supports continuous operation, disaster recovery, and handling large user volumes. Given the storage of personal data ('user info, progress, conversation history', 'phone # as unique ID'), robust data privacy and security protocols (encryption, access controls, audits, compliance with regulations like GDPR/CCPA) are critical, especially for 'Student' users. Security of the SMS Gateway and Database is paramount."
+                }
+            ]
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab-button');
+            const contentSections = document.querySelectorAll('.content-section');
+            const componentSelect = document.getElementById('componentSelect');
+            const componentDetail = document.getElementById('componentDetail');
+            const capabilitiesAccordion = document.getElementById('capabilitiesAccordion');
+            const dataFlowsTableContainer = document.getElementById('dataFlowsTableContainer');
+            const interactiveDataFlow = document.getElementById('interactiveDataFlow');
+            const currentDataFlowStepDisplay = document.getElementById('currentDataFlowStep');
+            const prevDataFlowStepButton = document.getElementById('prevDataFlowStep');
+            const nextDataFlowStepButton = document.getElementById('nextDataFlowStep');
+            const overviewComponentBlocks = document.querySelectorAll('#overview .component-block');
+
+            let currentDataFlowIdx = -1;
+
+            function showTab(tabId) {
+                contentSections.forEach(section => {
+                    section.classList.add('hidden');
+                });
+                tabs.forEach(tab => {
+                    tab.classList.remove('active');
+                });
+
+                document.getElementById(tabId).classList.remove('hidden');
+                document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    showTab(tab.dataset.tab);
+                });
+            });
+            
+            overviewComponentBlocks.forEach(block => {
+                block.addEventListener('click', () => {
+                    const componentId = block.dataset.componentId;
+                    if (componentId) {
+                        showTab('components');
+                        componentSelect.value = componentId;
+                        displayComponentDetails(componentId);
+                    }
+                });
+            });
+
+            function populateComponentSelect() {
+                reportData.components.forEach(component => {
+                    const option = document.createElement('option');
+                    option.value = component.id;
+                    option.textContent = component.name;
+                    componentSelect.appendChild(option);
+                });
+            }
+
+            function displayComponentDetails(componentId) {
+                const component = reportData.components.find(c => c.id === componentId);
+                if (component) {
+                    componentDetail.innerHTML = `
+                        <h3 class="text-xl font-semibold text-sky-700 mb-2">${component.name}</h3>
+                        <p class="mb-1"><strong class="font-medium text-stone-700">Primary Function:</strong> ${component.primaryFunction}</p>
+                        <p class="mb-3"><strong class="font-medium text-stone-700">Key Responsibilities:</strong> ${component.keyResponsibilities}</p>
+                        <h4 class="text-lg font-semibold text-stone-800 mt-4 mb-1">Detailed Description:</h4>
+                        <p class="text-stone-600 leading-relaxed mb-3">${component.details}</p>
+                        <h4 class="text-lg font-semibold text-stone-800 mt-4 mb-1">Key Interactions:</h4>
+                        <p class="text-stone-600 leading-relaxed">${component.interactions}</p>
+                    `;
+                } else {
+                    componentDetail.innerHTML = '<p class="text-stone-500">Select a component to see its details here.</p>';
+                }
+            }
+
+            componentSelect.addEventListener('change', (e) => {
+                displayComponentDetails(e.target.value);
+            });
+
+            function populateCapabilities() {
+                reportData.capabilities.forEach((capability, index) => {
+                    const accordionItem = document.createElement('div');
+                    accordionItem.innerHTML = `
+                        <button class="accordion-button" data-index="${index}">
+                            <span>${capability.title}</span>
+                            <span class="transform transition-transform duration-200 ease-out">▼</span>
+                        </button>
+                        <div class="accordion-content hidden">
+                            <p class="text-stone-600 leading-relaxed">${capability.content}</p>
+                        </div>
+                    `;
+                    capabilitiesAccordion.appendChild(accordionItem);
+                });
+
+                document.querySelectorAll('.accordion-button').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const content = button.nextElementSibling;
+                        const icon = button.querySelector('span:last-child');
+                        content.classList.toggle('hidden');
+                        icon.classList.toggle('rotate-180');
+                    });
+                });
+            }
+
+            function populateDataFlowsTable() {
+                let tableHTML = '<table class="min-w-full divide-y divide-stone-200">';
+                tableHTML += `
+                    <thead>
+                        <tr>
+                            <th>Source Component</th>
+                            <th>Destination Component</th>
+                            <th>Data Type/Content</th>
+                            <th>Purpose of Interaction</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-stone-200">
+                `;
+                reportData.dataFlowsTable.forEach(flow => {
+                    tableHTML += `
+                        <tr>
+                            <td>${flow.source}</td>
+                            <td>${flow.destination}</td>
+                            <td>${flow.dataType}</td>
+                            <td>${flow.purpose}</td>
+                        </tr>
+                    `;
+                });
+                tableHTML += '</tbody></table>';
+                dataFlowsTableContainer.innerHTML = tableHTML;
+            }
+
+            function displayCurrentDataFlowStep() {
+                if (currentDataFlowIdx >= 0 && currentDataFlowIdx < reportData.dataFlows.length) {
+                    const flow = reportData.dataFlows[currentDataFlowIdx];
+                    currentDataFlowStepDisplay.innerHTML = `
+                        <h4 class="text-lg font-semibold text-sky-600 mb-2">Step ${flow.step}: ${flow.title}</h4>
+                        <p><strong class="font-medium text-stone-700">From:</strong> ${flow.source}</p>
+                        <p><strong class="font-medium text-stone-700">To:</strong> ${flow.destination}</p>
+                        <p><strong class="font-medium text-stone-700">Data:</strong> ${flow.dataType}</p>
+                        <p><strong class="font-medium text-stone-700">Purpose:</strong> ${flow.purpose}</p>
+                    `;
+                } else {
+                     currentDataFlowStepDisplay.innerHTML = '<p class="text-stone-500">Click "Next Step" to begin exploring the data flow or "Previous Step" to go back.</p>';
+                }
+                prevDataFlowStepButton.disabled = currentDataFlowIdx <= 0;
+                nextDataFlowStepButton.disabled = currentDataFlowIdx >= reportData.dataFlows.length - 1;
+            }
+            
+            nextDataFlowStepButton.addEventListener('click', () => {
+                if (currentDataFlowIdx < reportData.dataFlows.length - 1) {
+                    currentDataFlowIdx++;
+                    displayCurrentDataFlowStep();
+                }
+            });
+
+            prevDataFlowStepButton.addEventListener('click', () => {
+                if (currentDataFlowIdx > 0) {
+                    currentDataFlowIdx--;
+                    displayCurrentDataFlowStep();
+                }
+            });
+
+
+            // Initial population
+            populateComponentSelect();
+            populateCapabilities();
+            populateDataFlowsTable();
+            displayCurrentDataFlowStep(); // To show initial message
+            showTab('overview'); // Show overview tab by default
+        });
+    </script>
+</body>
+</html>

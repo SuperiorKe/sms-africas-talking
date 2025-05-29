@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperiaTech Learning Chat</title>
+    <style>
+        /* Your existing CSS from the artifact above */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* ... (include all the CSS from the HTML artifact) ... */
+    </style>
+</head>
+<body>
+    <!-- Your existing HTML from the artifact above -->
+    <div class="chat-container">
+        <!-- ... (include all the HTML structure from the artifact) ... -->
+    </div>
+
+    <script>
+        class ChatInterface {
+            constructor() {
+                this.messagesContainer = document.getElementById('messagesContainer');
+                this.messageInput = document.getElementById('messageInput');
+                this.sendButton = document.getElementById('sendButton');
+                this.typingIndicator = document.getElementById('typingIndicator');
+                this.sessionId = this.generateSessionId();
+                
+                this.init();
+            }
+
+            generateSessionId() {
+                return 'web_' + Math.random().toString(36).substr(2, 9);
+            }
+
+            init() {
+                this.sendButton.addEventListener('click', () => this.sendMessage());
+                this.messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.sendMessage();
+                    }
+                });
+                this.messageInput.focus();
+            }
+
+            async sendMessage() {
+                const message = this.messageInput.value.trim();
+                if (!message) return;
+
+                this.setLoading(true);
+                this.addMessage(message, 'user');
+                this.messageInput.value = '';
+                this.showTyping();
+
+                try {
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            session_id: this.sessionId
+                        })
+                    });
+
+                    const data = await response.json();
+                    
+                    this.hideTyping();
+                    
+                    if (data.success) {
+                        this.addMessage(data.response, 'ai');
+                    } else {
+                        this.addMessage('Sorry, I encountered an error. Please try again.', 'ai');
+                    }
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    this.hideTyping();
+                    this.addMessage('Connection error. Please check your internet and try again.', 'ai');
+                } finally {
+                    this.setLoading(false);
+                }
+            }
+
+            addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+                
+                const now = new Date();
+                const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                messageDiv.innerHTML = `
+                    <div class="message-bubble">
+                        ${this.escapeHtml(text)}
+                        <div class="message-time">${timeString}</div>
+                    </div>
+                `;
+
+                this.messagesContainer.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            showTyping() {
+                this.typingIndicator.style.display = 'block';
+                this.scrollToBottom();
+            }
+
+            hideTyping() {
+                this.typingIndicator.style.display = 'none';
+            }
+
+            setLoading(loading) {
+                this.sendButton.disabled = loading;
+                this.messageInput.disabled = loading;
+                
+                if (loading) {
+                    this.sendButton.innerHTML = '⏳';
+                } else {
+                    this.sendButton.innerHTML = '➤';
+                    this.messageInput.focus();
+                }
+            }
+
+            scrollToBottom() {
+                setTimeout(() => {
+                    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+                }, 100);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new ChatInterface();
+        });
+    </script>
+</body>
+</html>
