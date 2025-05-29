@@ -111,8 +111,8 @@ The application includes comprehensive error handling for:
 
 ## License
 
-[Your chosen license]
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contributing
 
-[Your contribution guidelines] 
+Contributions are welcome! Please feel free to submit a Pull Request. 
